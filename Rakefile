@@ -29,7 +29,7 @@ end
 begin
   Jeweler::Tasks.new do |gemspec|
     gemspec.authors           = ["Coroutine", "Tim Lowrimore", "John Dugan"]
-    gemspec.description       = "Michael HintBuble allows you to generate hint bubbles and tooltips in Rails applications using ridiculously simple syntax."
+    gemspec.description       = "Michael HintBuble allows you to generate hint bubbles and tooltips in Rails applications using the same syntax used for rendering templates."
     gemspec.email             = "gems@coroutine.com"
     gemspec.homepage          = "http://github.com/coroutine/michael_hintbuble"
     gemspec.name              = "michael_hintbuble"

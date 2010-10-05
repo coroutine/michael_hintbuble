@@ -7,19 +7,22 @@ module Coroutine                #:nodoc:
       # The target_id is required and should be unique (duh). Further options may be provided; those that 
       # are specific to the hint bubble are:
       #
-      # * <tt>:content</tt> - the content to display in the hint bubble (i.e., an alternative to block notation)
+      # * <tt>:class</tt> - the css style to assign to the outer div container (defaults to "container")
       # * <tt>:position</tt> - css-style values that specify the hint bubble's relative position (e.g. top right)
-      # * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the tooltip
+      # * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble
       # * <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
       # * <tt>:after_show</tt> - a Javascript function that will be invoked after the hint bubble has been shown
       # * <tt>:before_hide</tt> - a Javascript function that will be invoked before the hint bubble is hidden
       # * <tt>:after_hide</tt> - a Javascript function that will be invoked after the hint bubble has been hidden
-      #
+      # * <tt>&block</tt> - HTML markup that will be automatically converted to render's inline option
+      # 
+      # All remaining options are the same as the options available to ActionController::Base#render.  Please
+      # see the documentation for ActionController::Base#render for further details.
       # 
       # ==== Events
       #
       # The library manages repositioning the hint bubble in response to resizing and scrolling events automatically.
-      # You do not need to specify <tt>resize</tt> or <tt>scroll</tt> in the optional events array.
+      # You do not need to specify <tt>resize</tt> or <tt>scroll</tt> in the optional event names array.
       #
       # The library defaults to trapping mouse gestures, but it is capable of trapping focus events in addition
       # to or in place of mouse events.  When specifying events, you need only reference the positive action: the
@@ -66,18 +69,16 @@ module Coroutine                #:nodoc:
       # events and positions itself to the left of the target.
       #
       def render_bubble(target_id, options = {}, &block)
-        content = (block_given?) ? capture(&block) : options.delete(:content)
-              
+        options[:inline]    = capture(&block) if block_given?
+        render_options      = extract_bubble_render_options(options, &block)
+        javascript_options  = bubble_options_to_js(extract_bubble_javascript_options(options))
+        
+        content = escape_javascript(render(options))
+        
         raise "You gotta specify a target id to register a hint bubble, baby."  unless target_id
         raise "You gotta provide content to register a hint bubble, baby."      unless content
-                
-        default_options = { :event_names => ["mouseover"], :position => "center right" }
-        bubble_options  = [:content, :event_names, :before_show, :after_show, :before_hide, :after_hide].inject(default_options) do |h, k|
-          h[k] = options.delete(k) if options.has_key?(k) 
-          h
-        end
         
-        javascript_tag "MichaelHintbuble.HintBubble.instances['#{target_id}'] = new MichaelHintbuble.HintBubble('#{escape_javascript(content)}', #{bubble_options.to_json});"
+        javascript_tag "MichaelHintbuble.Bubble.instances['#{target_id}'] = new MichaelHintbuble.Bubble('#{target_id}', '#{content}', #{javascript_options});"
       end
             
             
@@ -94,6 +95,73 @@ module Coroutine                #:nodoc:
       #
       def hide_bubble(target_id)
         "MichaelHintbuble.Bubble.hide('#{target_id}');"
+      end
+      
+      
+      
+      private
+      
+      # This method returns an array of javascript option keys supported by the accompanying
+      # javascript library.
+      #
+      def bubble_javascript_option_keys
+        [:class, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
+      end
+      
+      
+      # This method converts ruby hashes using underscore notation to js strings using camelcase 
+      # notation, which is more common in javascript.
+      #
+      def bubble_options_to_js(options={})
+        js_kv_pairs = []
+        sorted_keys = options.keys.map { |k| k.to_s }.sort.map { |s| s.to_sym }
+          
+        sorted_keys.each do |key|
+          js_key   = key.to_s.camelcase(:lower)
+          js_value = "null" 
+          
+          unless options[key].empty?
+            case key
+              when :before_show, :after_show, :before_hide, :after_hide
+                js_value = "#{options[key]}" 
+              when :event_names
+                js_value = "['" + options[key].join("','") + "']"
+              else
+                js_value = "'#{options[key]}'" 
+            end
+          end
+          
+          js_kv_pairs << "#{js_key}:#{js_value}"
+        end
+        
+        "{#{js_kv_pairs.join(',')}}"
+      end
+      
+      
+      # This method returns a hash with javascript options. It also inspects the supplied options 
+      # and adds defaults as necessary.
+      #
+      def extract_bubble_javascript_options(options)
+        js_options = options.reject { |k,v| !bubble_javascript_option_keys.include?(k) }
+        
+        js_options[:class]        = "container"     if js_options[:class].blank?
+        js_options[:position]     = "right"         if js_options[:position].blank?
+        js_options[:event_names]  = []              if js_options[:event_names].blank?
+        
+        js_options[:event_names]  = js_options[:event_names].uniq.map { |en| en.to_s }
+        js_options[:event_names] << "mouseover"     if     js_options[:event_names].empty?
+        js_options[:event_names] << "resize"        unless js_options[:event_names].include?("resize")
+        js_options[:event_names] << "scroll"        unless js_options[:event_names].include?("scroll")
+        
+        js_options
+      end
+      
+      
+      # This method returns a hash with rendering options. It also inspects the supplied options 
+      # and adds defaults as necessary.
+      #
+      def extract_bubble_render_options(options)
+        options.reject { |k,v| bubble_javascript_option_keys.include?(k) }
       end
       
     end

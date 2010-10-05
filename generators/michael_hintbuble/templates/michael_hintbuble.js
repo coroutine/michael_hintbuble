@@ -527,4 +527,4 @@ MichaelHintbuble.BubblePositioner.prototype.setPosition = function(position) {
  */
 MichaelHintbuble.BubblePositioner.prototype.styleClassForPosition = function() {
     return this._position.toLowerCase();
-}; 
+};
