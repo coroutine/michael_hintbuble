@@ -78,7 +78,7 @@ module Coroutine                #:nodoc:
         raise "You gotta specify a target id to register a hint bubble, baby."  unless target_id
         raise "You gotta provide content to register a hint bubble, baby."      unless content
         
-        javascript_tag "MichaelHintbuble.Bubble.instances['#{target_id}'] = new MichaelHintbuble.Bubble('#{target_id}', '#{content}', #{javascript_options});"
+        javascript_tag "Event.observe(window, 'load', function() { MichaelHintbuble.Bubble.instances['#{target_id}'] = new MichaelHintbuble.Bubble('#{target_id}', '#{content}', #{javascript_options}) });"
       end
             
             
@@ -105,7 +105,7 @@ module Coroutine                #:nodoc:
       # javascript library.
       #
       def bubble_javascript_option_keys
-        [:class, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
+        [:class, :style, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
       end
       
       
@@ -148,6 +148,7 @@ module Coroutine                #:nodoc:
         js_options[:position]     = "right"         if js_options[:position].blank?
         js_options[:event_names]  = []              if js_options[:event_names].blank?
         
+        js_options[:class]        = js_options[:class].to_s
         js_options[:event_names]  = js_options[:event_names].uniq.map { |en| en.to_s }
         js_options[:event_names] << "mouseover"     if     js_options[:event_names].empty?
         js_options[:event_names] << "resize"        unless js_options[:event_names].include?("resize")

@@ -48,7 +48,7 @@ class MichaelHintbubleHelpersTest < ActionView::TestCase
     
     expected  = "<script type=\"text/javascript\">\n" \
                 "//<![CDATA[\n" \
-                "MichaelHintbuble.Bubble.instances['come_fly_with_me'] = new MichaelHintbuble.Bubble('come_fly_with_me', '#{text}', #{default_options});\n" \
+                "Event.observe(window, 'load', function() { MichaelHintbuble.Bubble.instances['come_fly_with_me'] = new MichaelHintbuble.Bubble('come_fly_with_me', '#{text}', #{default_options}) });\n" \
                 "//]]>\n" \
                 "</script>"
     actual    = @view.render_bubble(:come_fly_with_me, :text => text)
@@ -79,7 +79,7 @@ class MichaelHintbubleHelpersTest < ActionView::TestCase
   #---------------------------------------------------------
 
   def test_bubble_javascript_option_keys
-    expected  = [:class, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
+    expected  = [:class, :style, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
     actual    = @view.send(:bubble_javascript_option_keys)
 
     assert_equal expected, actual

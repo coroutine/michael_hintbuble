@@ -12,13 +12,16 @@
 
 .michael_hintbuble_bubble {                   
     position: absolute;
+    top: 0;
+    left: 0;
     z-index: 2;
     filter: alpha(opacity=100);                         /* really only needed if ie6 suport is enabled */
+    width: 240px;
 }
 .michael_hintbuble_bubble .container {
-    font-size: .75em;
-    padding: 8px;
     margin: 2px;
+    padding: 8px;
+    font-size: .85em;
 }
 .michael_hintbuble_bubble .container .content {
     padding:                8px;
@@ -28,14 +31,20 @@
     -moz-border-radius:     2px;
     -webkit-border-radius:  2px;
 }
-.michael_hintbuble_bubble .bottomCenter,                /* centerCenter is nonsense and not allowed */
-.michael_hintbuble_bubble .bottomLeft,
-.michael_hintbuble_bubble .bottomRight,
-.michael_hintbuble_bubble .centerLeft,
-.michael_hintbuble_bubble .centerRight,
-.michael_hintbuble_bubble .centerTop,
-.michael_hintbuble_bubble .leftTop,         
-.michael_hintbuble_bubble .rightTop {
+.michael_hintbuble_bubble .bottom,               
+.michael_hintbuble_bubble .left,
+.michael_hintbuble_bubble .right,
+.michael_hintbuble_bubble .top {
     background: url('../images/michael_hintbuble_pointer.png') no-repeat bottom;
 }
+.michael_hintbuble_bubble .bottom {
+    background-position: top;
+}
+.michael_hintbuble_bubble .left {
+    background-position: right;
+}
+.michael_hintbuble_bubble .right {
+    background-position: left;
+}
+
 

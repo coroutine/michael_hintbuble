@@ -36,6 +36,7 @@ MichaelHintbuble.Bubble = function(target_id, content, options) {
     this._isShowing     = null;
     
     this._class         = options["class"]      || "container";
+    this._style         = options["style"]      || "";
     this._eventNames    = options["eventNames"] || ["mouseover","resize","scroll"]
     this._position      = options["position"]   || "right";
     this._beforeShow    = options["beforeShow"] || Prototype.emptyFunction
@@ -137,7 +138,7 @@ MichaelHintbuble.Bubble.show = function(id) {
  * This function establishes all of the observations specified in the options.
  */
 MichaelHintbuble.Bubble.prototype._attachObservers = function() {
-    if (this._eventNames.indexOf("focus") > -1)
+    if (this._eventNames.indexOf("focus") > -1) {
         this._target.observe("focus", function() {
             this.show();
         }.bind(this));
@@ -145,7 +146,7 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
             this.hide();
         }.bind(this));
     }
-    if (this._eventNames.indexOf("mouseover") > -1)
+    if (this._eventNames.indexOf("mouseover") > -1) {
         this._target.observe("mouseover", function() {
             this.show();
         }.bind(this));
@@ -153,14 +154,19 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
             this.hide();
         }.bind(this));
     }
-    if (this._eventNames.indexOf("resize") > -1)
+    if (this._eventNames.indexOf("resize") > -1) {
         Event.observe(window, "resize", function() {
-            this.setPosition();
+            if (this.isShowing()) {
+                this.setPosition();
+            }
         }.bind(this));
     }
-    if (this._eventNames.indexOf("scroll") > -1)
+    if (this._eventNames.indexOf("scroll") > -1) {
         Event.observe(window, "scroll", function() {
-            this.setPosition();
+            if (this.isShowing()) {
+                alert("scrolling");
+                this.setPosition();
+            }
         }.bind(this));
     }
 };
@@ -176,6 +182,7 @@ MichaelHintbuble.Bubble.prototype._makeBubble = function() {
         
         this._element = new Element("DIV");
         this._element.className = "michael_hintbuble_bubble";
+        this._element.writeAttribute("style", this._style);
         this._element.update(this._container);
         this._element.hide();
         document.body.insert(this._element);
@@ -201,7 +208,7 @@ MichaelHintbuble.Bubble.prototype._makeFrame = function() {
  */
 MichaelHintbuble.Bubble.prototype._makePositioner = function() {
     if (!this._positioner) {
-        this._positioner = MichaelHintbuble.BubblePositioner(this._target, this._element);
+        this._positioner = new MichaelHintbuble.BubblePositioner(this._target, this._element, this._position);
     }
 };
 
@@ -220,7 +227,7 @@ MichaelHintbuble.Bubble.prototype._updateContainerClass = function() {
  * This function allows the bubble object to be destroyed without
  * creating memory leaks.
  */
-MichaelHintbuble.BubblePositioner.prototype.finalize = function() {
+MichaelHintbuble.Bubble.prototype.finalize = function() {
     this._positioner.finalize();
     this._container.remove();
     this._element.remove();
@@ -277,7 +284,11 @@ MichaelHintbuble.Bubble.prototype.isShowing = function() {
  *                          to the hint bubble container.
  */
 MichaelHintbuble.Bubble.prototype.setContent = function(content) {
-    this._container.update(content);
+    var content_container = new Element("DIV");
+    content_container.className = "content";
+    content_container.update(content);
+    
+    this._container.update(content_container);
 };
 
 
@@ -296,7 +307,7 @@ MichaelHintbuble.Bubble.prototype.setPosition = function(position) {
         this._position = position.toLowerCase();
     }
     this._positioner.setPosition(this._position);
-    this._updateContainerClasses();
+    this._updateContainerClass();
 };
 
 
@@ -308,10 +319,11 @@ MichaelHintbuble.Bubble.prototype.show = function() {
     this.setPosition();
     
     if (this._frame) {
-        this._frame.style.top       = this._element.style.top;
-        this._frame.style.left      = this._element.style.left;
-        this._frame.style.width     = this._element.getWidth() + "px";
-        this._frame.style.height    = this._element.getHeight() + "px";
+        var layout                  = new Element.Layout(this._element);
+        this._frame.style.top       = layout.get("top") + "px";
+        this._frame.style.left      = layout.get("left") + "px";
+        this._frame.style.width     = layout.get("width") + "px";
+        this._frame.style.height    = layout.get("height") + "px";
         
         new Effect.Appear(this._frame, {
             duration: 0.2
@@ -341,22 +353,29 @@ MichaelHintbuble.Bubble.prototype.show = function() {
  * @param {Element} target      the dom element to which the bubble is anchored.
  * @param {Element} element     the bubble element itself.
  */
-MichaelHintbuble.BubblePositioner = function(target, element) {
+MichaelHintbuble.BubblePositioner = function(target, element, position) {
     this._target    = target;
     this._element   = element;
+    this._position  = position;
     this._axis      = null
-    this._position  = null;
 };
+
+
+/**
+ * These properties establish numeric values for the x and y axes.
+ */
+MichaelHintbuble.BubblePositioner.X_AXIS = 1;
+MichaelHintbuble.BubblePositioner.Y_AXIS = 2;
 
 
 /**
  * This property maps position values to one or the other axis.
  */
 MichaelHintbuble.BubblePositioner.AXIS_MAP = {
-    left:   Tooltip._Positioner.X_AXIS,
-    right:  Tooltip._Positioner.X_AXIS,
-    top:    Tooltip._Positioner.Y_AXIS,
-    bottom: Tooltip._Positioner.Y_AXIS
+    left:   MichaelHintbuble.BubblePositioner.X_AXIS,
+    right:  MichaelHintbuble.BubblePositioner.X_AXIS,
+    top:    MichaelHintbuble.BubblePositioner.Y_AXIS,
+    bottom: MichaelHintbuble.BubblePositioner.Y_AXIS
 };
 
 
@@ -375,24 +394,22 @@ MichaelHintbuble.BubblePositioner.COMPLEMENTS = {
  * This hash is a convenience that allows us to write slightly denser code when 
  * calculating the bubble's position.
  */
-MichaelHintbuble.BubblePositioner.POSITION_FN_MAP = $H({
+MichaelHintbuble.BubblePositioner.POSITION_FN_MAP = {
     left:   "getWidth",
     top:    "getHeight"
-});
+};
 
-
-/**
- * These properties establish numeric values for the x and y axes.
- */
-MichaelHintbuble.BubblePositioner.X_AXIS = 1;
-MichaelHintbuble.BubblePositioner.Y_AXIS = 2;
 
 
 /**
  * This function positions the element below the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._bottom = function() {
-    this._element.style.top = (this._target.positionedOffset().top + this._element.getHeight()) + "px";
+    var to = this._target.cumulativeOffset();
+    var ts = this._target.cumulativeScrollOffset();
+    var tl = new Element.Layout(this._target);
+    
+    this._element.style.top = (to.top - ts.top + tl.get("border-box-height")) + "px";
 };
 
 
@@ -401,13 +418,16 @@ MichaelHintbuble.BubblePositioner.prototype._bottom = function() {
  * axis it is on.
  */
 MichaelHintbuble.BubblePositioner.prototype._center = function() {
-    var targetOffset = this._target.positionedOffset();
+    var to = this._target.cumulativeOffset();
+    var ts = this._target.cumulativeScrollOffset();
+    var tl = new Element.Layout(this._target);
+    var el = new Element.Layout(this._element);
     
-    if (this._axis === MichaelHintbuble.BubblePositioner.Y_AXIS) {
-        this._element.style.left = ((targetOffset.left + this._target.getWidth() / 2) - this._element.getWidth() / 2) + "px";
-    } 
-    else {
-        this._element.style.top  = ((targetOffset.top + this._target.getHeight() / 2) - this._element.getHeight() / 2) + "px";
+    if (this._axis === MichaelHintbuble.BubblePositioner.X_AXIS) {
+        this._element.style.top = (to.top - ts.top + Math.ceil(tl.get("border-box-height")/2) - Math.ceil(el.get("padding-box-height")/2)) + "px";
+    }
+    else if (this._axis === MichaelHintbuble.BubblePositioner.Y_AXIS) {
+        this._element.style.left = (to.left - ts.left + Math.ceil(tl.get("border-box-width")/2) - Math.ceil(el.get("padding-box-width")/2)) + "px";
     }
 };
 
@@ -448,7 +468,11 @@ MichaelHintbuble.BubblePositioner.prototype._isElementWithinViewport = function(
  * This function positions the element to the left of the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._left = function() {
-    this._element.style.left = (this._target.positionedOffset().left - this._element.getWidth()) + "px";
+    var to = this._target.cumulativeOffset();
+    var ts = this._target.cumulativeScrollOffset();
+    var el = new Element.Layout(this._element);
+    
+    this._element.style.left = (to.left - to.left - el.get("padding-box-width")) + "px";
 };
 
 
@@ -456,7 +480,11 @@ MichaelHintbuble.BubblePositioner.prototype._left = function() {
  * This function positions the element to the right of the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._right = function() {
-    this._element.style.left = (this._target.positionedOffset().left + this._element.getWidth()) + "px";
+    var to = this._target.cumulativeOffset();
+    var ts = this._target.cumulativeScrollOffset();
+    var tl = new Element.Layout(this._target);
+    
+    this._element.style.left = (to.left - ts.left + tl.get("border-box-width")) + "px";
 };
 
 
@@ -469,7 +497,7 @@ MichaelHintbuble.BubblePositioner.prototype._right = function() {
  *                           target.
  */
 MichaelHintbuble.BubblePositioner.prototype._setPosition = function(position) {
-    this._axis     = MichaelHintbuble.BubblePositioner.AXIS_MAP[position];;
+    this._axis     = MichaelHintbuble.BubblePositioner.AXIS_MAP[position];
     this._position = position;
     this["_" + position]();
     this._center();
@@ -480,7 +508,10 @@ MichaelHintbuble.BubblePositioner.prototype._setPosition = function(position) {
  * This function positions the element above the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._top = function() {
-    this._element.style.top = (this._target.positionedOffset().top - this._element.getHeight()) + "px";
+    var to = this._target.cumulativeOffset();
+    var el = new Element.Layout(this._element);
+    
+    this._element.style.top = (to.top - el.get("padding-box-height")) + "px";
 };
 
 
