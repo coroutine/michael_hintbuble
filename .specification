@@ -1,13 +1,13 @@
 --- !ruby/object:Gem::Specification 
 name: michael_hintbuble
 version: !ruby/object:Gem::Version 
-  hash: 25
+  hash: 31
   prerelease: false
   segments: 
   - 0
   - 1
-  - 1
-  version: 0.1.1
+  - 2
+  version: 0.1.2
 platform: ruby
 authors: 
 - Coroutine

@@ -2,7 +2,7 @@
  * These styles are provided as examples. Feel free to change them however you like. 
  * Go ahead, see if we fucking care.
  */
- 
+
 .michael_hintbuble_bubble_frame {
     position: absolute;
     border: none;
@@ -46,5 +46,3 @@
 .michael_hintbuble_bubble .right {
     background-position: left;
 }
-
-

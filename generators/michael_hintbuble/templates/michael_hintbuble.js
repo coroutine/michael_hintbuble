@@ -164,7 +164,6 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
     if (this._eventNames.indexOf("scroll") > -1) {
         Event.observe(window, "scroll", function() {
             if (this.isShowing()) {
-                alert("scrolling");
                 this.setPosition();
             }
         }.bind(this));
@@ -405,11 +404,10 @@ MichaelHintbuble.BubblePositioner.POSITION_FN_MAP = {
  * This function positions the element below the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._bottom = function() {
-    var to = this._target.cumulativeOffset();
-    var ts = this._target.cumulativeScrollOffset();
+    var to = this._targetAdjustedOffset();
     var tl = new Element.Layout(this._target);
     
-    this._element.style.top = (to.top - ts.top + tl.get("border-box-height")) + "px";
+    this._element.style.top = (to.top + tl.get("border-box-height")) + "px";
 };
 
 
@@ -418,16 +416,15 @@ MichaelHintbuble.BubblePositioner.prototype._bottom = function() {
  * axis it is on.
  */
 MichaelHintbuble.BubblePositioner.prototype._center = function() {
-    var to = this._target.cumulativeOffset();
-    var ts = this._target.cumulativeScrollOffset();
+    var to = this._targetAdjustedOffset();
     var tl = new Element.Layout(this._target);
     var el = new Element.Layout(this._element);
     
     if (this._axis === MichaelHintbuble.BubblePositioner.X_AXIS) {
-        this._element.style.top = (to.top - ts.top + Math.ceil(tl.get("border-box-height")/2) - Math.ceil(el.get("padding-box-height")/2)) + "px";
+        this._element.style.top = (to.top + Math.ceil(tl.get("border-box-height")/2) - Math.ceil(el.get("padding-box-height")/2)) + "px";
     }
     else if (this._axis === MichaelHintbuble.BubblePositioner.Y_AXIS) {
-        this._element.style.left = (to.left - ts.left + Math.ceil(tl.get("border-box-width")/2) - Math.ceil(el.get("padding-box-width")/2)) + "px";
+        this._element.style.left = (to.left + Math.ceil(tl.get("border-box-width")/2) - Math.ceil(el.get("padding-box-width")/2)) + "px";
     }
 };
 
@@ -468,11 +465,10 @@ MichaelHintbuble.BubblePositioner.prototype._isElementWithinViewport = function(
  * This function positions the element to the left of the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._left = function() {
-    var to = this._target.cumulativeOffset();
-    var ts = this._target.cumulativeScrollOffset();
+    var to = this._targetAdjustedOffset();
     var el = new Element.Layout(this._element);
     
-    this._element.style.left = (to.left - to.left - el.get("padding-box-width")) + "px";
+    this._element.style.left = (to.left - el.get("padding-box-width")) + "px";
 };
 
 
@@ -480,11 +476,10 @@ MichaelHintbuble.BubblePositioner.prototype._left = function() {
  * This function positions the element to the right of the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._right = function() {
-    var to = this._target.cumulativeOffset();
-    var ts = this._target.cumulativeScrollOffset();
+    var to = this._targetAdjustedOffset();
     var tl = new Element.Layout(this._target);
     
-    this._element.style.left = (to.left - ts.left + tl.get("border-box-width")) + "px";
+    this._element.style.left = (to.left + tl.get("border-box-width")) + "px";
 };
 
 
@@ -505,10 +500,26 @@ MichaelHintbuble.BubblePositioner.prototype._setPosition = function(position) {
 
 
 /**
+ * This function returns a hash with the adjusted offset positions for the target
+ * element.
+ */
+MichaelHintbuble.BubblePositioner.prototype._targetAdjustedOffset = function() {
+    var bs = $$("body").first().cumulativeScrollOffset();
+    var to = this._target.cumulativeOffset();
+    var ts = this._target.cumulativeScrollOffset();
+    
+    return {
+        "top": to.top - ts.top + bs.top,
+        "left": to.left - ts.left + bs.left
+    }
+};
+
+
+/**
  * This function positions the element above the target.
  */
 MichaelHintbuble.BubblePositioner.prototype._top = function() {
-    var to = this._target.cumulativeOffset();
+    var to = this._targetAdjustedOffset();
     var el = new Element.Layout(this._element);
     
     this._element.style.top = (to.top - el.get("padding-box-height")) + "px";
