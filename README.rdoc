@@ -130,6 +130,21 @@ in the mix.
 
 
 
+== Installation & Generators (Rails 3)
+
+Install me from RubyGems.org by adding a gem dependency to your Gemfile.  Bundler does 
+the rest.
+
+	gem "michael_hintbuble"
+	
+	$ bundle install
+
+Then generate the required javascript file and the starter stylesheet and image.
+
+	$ rails g michael_hintbuble
+	
+
+
 == Installation & Generators (Rails 2)
 
 Install me from RubyGems.org and add a gem dependency in the appropriate file.
@@ -145,21 +160,6 @@ stylesheet and image.
 
 	$ script/generate michael_hintbuble
 
-
-
-== Installation & Generators (Rails 3)
-
-Install me from RubyGems.org by adding a gem dependency to your Gemfile.  Bundler does 
-the rest.
-
-	gem "michael_hintbuble"
-	
-	$ bundle install
-
-Then generate the required javascript file and the starter stylesheet and image.
-
-	$ rails g michael_hintbuble
-	
 
 
 == Gemroll
