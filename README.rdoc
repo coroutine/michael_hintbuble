@@ -1,74 +1,108 @@
-= Kenny Dialoggins
+= Michael Hintbuble
 
-Hey, there.
+Hiya.
 
-I'm Kenny Dialoggins.  A lot of people confuse me with the singer who rose to fame in the 1980s, but 
-I'm a different guy altogether.  
+I'm Michael Hintbuble.  A lot of people confuse me with the singer who rose to fame singing jazz
+standards, but I'm a different guy altogether.  
 
-Don't get me wrong, that Kenny and I are into a lot of the same things, like manly beards and Miami Vice-
-inspired attire.  But while that Kenny spent his career focused on synth beats and lyrics that cut to 
-the bone, I only care about one thing.
+Don't get me wrong, that Michael and I are into a lot of the same things, like dating Emily Blunt and 
+opening fictitious restaurants with Jon Hamm. But while that Michael spent his career focused on smooth 
+vocal stylings and making ladies of all nationalities swoon, I only care about one thing.
 
-<b>Freakin' Dialogs</b>.  
+<b>Freakin' Hint Bubbles.</b>.  
 
-If you're a Rails developer who wants to use dialogs but doesn't want to mess with Javascript, you 
-might want to prep your best friend for some bad news.  We're about to become tight.
+If you're a Rails developer who wants to use hint bubbles but doesn't want to mess with Javascript, I
+suggest you get yourself a firmer grip on your knickers.
 
-Let me lay it out for you.  If you want my dialog in one of your views, here's what you do:
+Check it.  If you want my hint bubble anchored to an element in one of your views, here's what you do:
 
-    # Create the dialog
-    <%= render_dialog :danger_zone_dialog, :partial => "danger_zone", :locals => { :pilot => current_user } %>
+    # Define the target
+    <div id="restaurant_header">Hamm and Buble</div>
     
-    # Invoke the dialog
-    <%= link_to_function "Take Me to the Danger Zone", show_dialog(:danger_zone_dialog) %>
+    # Create and attach the bubble
+    <%= render_bubble :restaurant_header, :position => :right, :event_names => [:mouse], :partial => "map", :locals => { :address => @restaurant.address } %>
 
-That's pretty much it.  Did you notice how <tt>render_dialog</tt> takes the same options as 
-<tt>render</tt>?  The content for your dialog can just be a regular old partial.
+That's pretty much it.  Did you notice how <tt>render_bubble</tt> takes the same options as 
+<tt>render</tt>?  The content for your bubble can just be a regular old partial.
 
-You like that.  I can tell.  Don't fight it.
+Boom.
 
-What's that, you want more details?  You got it, buddy.
+What's that, you want more details?  You got it, bro.
 
-<tt>render_dialog</tt> always needs a unique id for its first argument.  After that, it will
-take the same options as <tt>ActionController::Base#render</tt>.  It'll also take a few more, namely:
+<tt>render_bubble</tt> always needs the unique id for the target element as its first argument.  After 
+that, it will take the same options as <tt>ActionController::Base#render</tt>.  It'll also take a few 
+more, namely:
 
-* <tt>:before_show</tt> - a Javascript function that will be invoked before the dialog is shown
-* <tt>:after_show</tt> - a Javascript function that will be invoked after the dialog has become visible
-* <tt>:before_hide</tt> - a Javascript function that will be invoked before the dialog is hidden
-* <tt>:after_hide</tt> - a Javascript function that will be invoked after the dialog has been hidden
+* <tt>:class</tt> - the css style to assign to the outermost div container (defaults to "michael_hintbuble_bubble")
+* <tt>:style</tt> - additional css style assignments for outermost div container (defaults to "")
+* <tt>:position</tt> - css-style value that specifies the hint bubble's relative position, e.g., top, bottom, right, or left (defaults to right)
+* <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble (accepts focus and/or mouseover)
+* <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
+* <tt>:after_show</tt> - a Javascript function that will be invoked after the hint bubble has been shown
+* <tt>:before_hide</tt> - a Javascript function that will be invoked before the hint bubble is hidden
+* <tt>:after_hide</tt> - a Javascript function that will be invoked after the hint bubble has been hidden
+* <tt>&block</tt> - HTML markup that will be automatically converted to render's inline option
 
-Here's an example using the <tt>before_show</tt> option:
+Here's an example using the <tt>before_show</tt> option with block notation:
 
-    # Create the dialog with a callback
-    <%= render_dialog :footloose_dialog, :partial => "footloose", :before_show => "function() { alert('Everybody get footloose!'); }" %>
+    # Define the target
+    <div id="cry_for_help">I have a feeling that he's standing right behind me.</div>
     
-    # Invoke the dialog
-    <%= link_to_function "Dance party!", show_dialog(:footloose_dialog) %>
+    # Create and attach the bubble
+    <%= render_bubble :cry_for_help, :position => :bottom, :before_show => "function() { JonHamm.eyes.goBlack(); }" %>
+      <div>You are on the thinnest of ice.</div>
+    <% end %>
 
 If you need more help than that, maybe you should just look at the source code.  There are a ton of comments 
 in there.
 
     
-Your pal,
+Cheers,
 
-Kenny Dialoggins
+Michael Hintbuble
 
+
+
+== Positioning Notes
+
+Windows get resized, documents and divs scroll, stuff happens.  Sometimes the area in which you intended for a 
+hint bubble to appear ends up off the viewport.  Which kind of screws the whole hint bubble UI pattern.
+
+Good thing I'm so friendly.  Here's what I can do to help.  
+
+If you tell me to position the bubble to one side of the target and the bubble can't fit in the viewport over 
+there, I'll just place it on the opposite side.  If it doesn't fit over there either, I'll just give up and
+put it where you told me in the first place.  I'm not a mindreader, you know.
+
+
+
+== IE6 Support
+
+I'm not what you'd call a huge fan of IE6, so I don't provide a blocking 
+iframe for my hint bubbles by default.  But I can.  You just need to ask nicely.
+
+At the top of the generated javascript file, just change the obviously-named property 
+hanging	right off of the main namespace.  Like this.
+
+	MichaelHintbuble.SUPPORT_IE6_BULLSHIT = true;
+
+That's it. I do the rest.
 
 
 
 == Helpful Links
 
-* <b>Repository:</b> http://github.com/coroutine/kenny_dialoggins
-* <b>Gem:</b> http://rubygems.org/gems/kenny_dialoggins
+* <b>Repository:</b> http://github.com/coroutine/michael_hintbuble
+* <b>Gem:</b> http://rubygems.org/gems/michael_hintbuble
 * <b>Authors:</b> http://coroutine.com
 
 
 
 == Prerequisites
 
-To take you to the danger zone, I need my kick ass backup singers Prototype and Scriptaculous.  
+If you want to come fly with me, you'll need to invite the other members of my trio, Prototype and Scriptaculous.  
 
-But since I was designed as a Rails extension, chances are you already have my boys 
+But since I was designed as a Rails extension, chances are you already have my bandmates
 in the mix.
 
 * <b>Prototype:</b> http://prototypejs.org
@@ -76,33 +110,50 @@ in the mix.
 
 
 
-== Installation & Generators
+== Installation & Generators (Rails 2)
 
 Install me from RubyGems.org and add a gem dependency in the appropriate file.
 
-	$ gem install kenny_dialoggins
+	$ gem install michael_hintbuble
 
 Or install me as a plugin.
 
-	$ script/plugin install git://github.com/coroutine/kenny_dialoggins.git
+	$ script/plugin install git://github.com/coroutine/michael_hintbuble.git
 
-Either way, then generate the stylesheet and javascript files I need.
+Either way, then generate the required javascript file and the starter 
+stylesheet and image.
 
-	$ script/generate kenny_dialoggins
+	$ script/generate michael_hintbuble
+
+
+
+== Installation & Generators (Rails 3)
+
+Install me from RubyGems.org by adding a gem dependency to your Gemfile.  Bundler does 
+the rest.
+
+	gem "michael_hintbuble"
+	
+	$ bundle install
+
+Then generate the required javascript file and the starter stylesheet and image.
+
+	$ rails g michael_hintbuble
 	
 
 
-== IE6 Support
+== Gemroll
 
-I'm not what you'd call a huge fan of IE6, so I don't provide a blocking 
-iframe for my dialogs by default.  But I can.  You just need to ask nicely.
+If you think I'm awesome, you should check out my soulmate 
+{Kenny Dialoggins}[http://github.com/coroutine/kenny_dialoggins].
 
-At the top of the generated javascript file, just change the obviously-named property 
-hanging	right off of the Kenny D namespace.  Like this.
+Other gems by Coroutine include:
 
-	KennyDialoggins.SUPPORT_IE6_BULLSHIT = true;
-
-That's it. I do the rest.
+* {acts_as_current}[http://github.com/coroutine/acts_as_current]
+* {acts_as_label}[http://github.com/coroutine/acts_as_label]
+* {acts_as_list_with_sti_support}[http://github.com/coroutine/acts_as_list_with_sti_support]
+* {delayed_form_observer}[http://github.com/coroutine/delayed_form_observer]
+* {tiny_navigation}[http://github.com/coroutine/tiny_navigation]
 
 
 

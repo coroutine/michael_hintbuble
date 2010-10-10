@@ -5,11 +5,11 @@
 
 Gem::Specification.new do |s|
   s.name = %q{michael_hintbuble}
-  s.version = "0.1.2"
+  s.version = "0.1.3"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.authors = ["Coroutine", "Tim Lowrimore", "John Dugan"]
-  s.date = %q{2010-10-06}
+  s.date = %q{2010-10-10}
   s.description = %q{Michael HintBuble allows you to generate hint bubbles and tooltips in Rails applications using the same syntax used for rendering templates.}
   s.email = %q{gems@coroutine.com}
   s.extra_rdoc_files = [

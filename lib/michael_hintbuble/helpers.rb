@@ -7,8 +7,9 @@ module Coroutine                #:nodoc:
       # The target_id is required and should be unique (duh). Further options may be provided; those that 
       # are specific to the hint bubble are:
       #
-      # * <tt>:class</tt> - the css style to assign to the outer div container (defaults to "container")
-      # * <tt>:position</tt> - css-style values that specify the hint bubble's relative position (e.g. top right)
+      # * <tt>:class</tt> - the css style to assign to the outermost div container (defaults to "michael_hintbuble_bubble")
+      # * <tt>:style</tt> - additional css style assignments for outermost div container (defaults to "")
+      # * <tt>:position</tt> - css-style value that specifies the hint bubble's relative position, e.g., top, bottom, right, or left (defaults to right)
       # * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble
       # * <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
       # * <tt>:after_show</tt> - a Javascript function that will be invoked after the hint bubble has been shown
@@ -21,7 +22,7 @@ module Coroutine                #:nodoc:
       # 
       # ==== Events
       #
-      # The library manages repositioning the hint bubble in response to resizing and scrolling events automatically.
+      # The library manages repositioning the hint bubble in response to window resizing and scrolling events automatically.
       # You do not need to specify <tt>resize</tt> or <tt>scroll</tt> in the optional event names array.
       #
       # The library defaults to trapping mouse gestures, but it is capable of trapping focus events in addition
