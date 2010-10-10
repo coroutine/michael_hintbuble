@@ -9,7 +9,7 @@ Don't get me wrong, that Michael and I are into a lot of the same things, like d
 opening fictitious restaurants with Jon Hamm. But while that Michael spent his career focused on smooth 
 vocal stylings and making ladies of all nationalities swoon, I only care about one thing.
 
-<b>Freakin' Hint Bubbles.</b>.  
+<b>Freakin' Hint Bubbles</b>.  
 
 If you're a Rails developer who wants to use hint bubbles but doesn't want to mess with Javascript, I
 suggest you get yourself a firmer grip on your knickers.
@@ -20,21 +20,23 @@ Check it.  If you want my hint bubble anchored to an element in one of your view
     <div id="restaurant_header">Hamm and Buble</div>
     
     # Create and attach the bubble
-    <%= render_bubble :restaurant_header, :position => :right, :event_names => [:mouse], :partial => "map", :locals => { :address => @restaurant.address } %>
+    <%= render_bubble :restaurant_header, 
+                      :position => :right, :event_names => [:mouseover], 
+                      :partial  => "map",  :locals      => { :address => @restaurant.address } %>
 
 That's pretty much it.  Did you notice how <tt>render_bubble</tt> takes the same options as 
 <tt>render</tt>?  The content for your bubble can just be a regular old partial.
 
 Boom.
 
-What's that, you want more details?  You got it, bro.
+What's that, you want a few more details?  You got it, bro.
 
 <tt>render_bubble</tt> always needs the unique id for the target element as its first argument.  After 
 that, it will take the same options as <tt>ActionController::Base#render</tt>.  It'll also take a few 
 more, namely:
 
 * <tt>:class</tt> - the css style to assign to the outermost div container (defaults to "michael_hintbuble_bubble")
-* <tt>:style</tt> - additional css style assignments for outermost div container (defaults to "")
+* <tt>:style</tt> - additional css style assignments for the outermost div container (defaults to "")
 * <tt>:position</tt> - css-style value that specifies the hint bubble's relative position, e.g., top, bottom, right, or left (defaults to right)
 * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble (accepts focus and/or mouseover)
 * <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
@@ -60,6 +62,24 @@ in there.
 Cheers,
 
 Michael Hintbuble
+
+
+
+== Multiple Hint Bubble Styles
+
+If you need to style more than one kind of hint bubble (e.g., one style for tooltips, one style for errors), just
+use the <tt>:class</tt> option to set a new css class name on the outermost div.  That'll give you a logical anchor 
+around which you can restyle all the interior classes.
+
+Please note that the blocking iframe is automatically given a class name equal to the outermost div's class name plus 
+the string "_frame".  
+
+By default, the top-level class assignments are "michael_hintbuble_bubble" and "michael_hintbuble_bubble_frame". 
+
+If you set the <tt>:class</tt> option to <tt>:error_bubble</tt>, the top-level class assignments will be 
+"error_bubble" and "errorbubble_frame".
+
+The <tt>:style</tt> option can be used to provide one-off styling, as needed.
 
 
 
