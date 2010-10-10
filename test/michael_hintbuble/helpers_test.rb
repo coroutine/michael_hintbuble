@@ -44,7 +44,7 @@ class MichaelHintbubleHelpersTest < ActionView::TestCase
 
   def test_render_bubble_with_simple_options
     text            = "Who wants to play volleyball on a court with a four-foot net?"
-    default_options = "{class:'container',eventNames:['mouseover','resize','scroll'],position:'right'}" 
+    default_options = "{class:'michael_hintbuble_bubble',eventNames:['mouseover','resize','scroll'],position:'right'}" 
     
     expected  = "<script type=\"text/javascript\">\n" \
                 "//<![CDATA[\n" \
@@ -125,7 +125,7 @@ class MichaelHintbubleHelpersTest < ActionView::TestCase
     options     = { :event_names => ["focus", "resize", "scroll"], :position => "top right", :text => "Text" }
     js_options  = @view.send(:extract_bubble_javascript_options, options)
     
-    assert_equal  "container",  js_options[:class]
+    assert_equal  "michael_hintbuble_bubble",  js_options[:class]
   end
   def test_extract_bubble_javascript_options_for_default_event_names
     options     = { :class => "my_class", :position => "top right", :text => "Text" }
