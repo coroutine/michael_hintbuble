@@ -152,8 +152,6 @@ module Coroutine                #:nodoc:
         js_options[:class]        = js_options[:class].to_s
         js_options[:event_names]  = js_options[:event_names].uniq.map { |en| en.to_s }
         js_options[:event_names] << "mouseover"                 if     js_options[:event_names].empty?
-        js_options[:event_names] << "resize"                    unless js_options[:event_names].include?("resize")
-        js_options[:event_names] << "scroll"                    unless js_options[:event_names].include?("scroll")
         
         js_options
       end

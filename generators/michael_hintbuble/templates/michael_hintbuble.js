@@ -35,9 +35,9 @@ MichaelHintbuble.Bubble = function(target_id, content, options) {
     this._positioner    = null;
     this._isShowing     = null;
     
-    this._class         = options["class"]      || "container";
+    this._class         = options["class"]      || "michael_hintbuble_bubble";
     this._style         = options["style"]      || "";
-    this._eventNames    = options["eventNames"] || ["mouseover","resize","scroll"]
+    this._eventNames    = options["eventNames"] || ["mouseover"]
     this._position      = options["position"]   || "right";
     this._beforeShow    = options["beforeShow"] || Prototype.emptyFunction
     this._afterShow     = options["afterShow"]  || Prototype.emptyFunction
@@ -154,20 +154,16 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
             this.hide();
         }.bind(this));
     }
-    if (this._eventNames.indexOf("resize") > -1) {
-        Event.observe(window, "resize", function() {
-            if (this.isShowing()) {
-                this.setPosition();
-            }
-        }.bind(this));
-    }
-    if (this._eventNames.indexOf("scroll") > -1) {
-        Event.observe(window, "scroll", function() {
-            if (this.isShowing()) {
-                this.setPosition();
-            }
-        }.bind(this));
-    }
+    Event.observe(window, "resize", function() {
+        if (this.isShowing()) {
+            this.setPosition();
+        }
+    }.bind(this));
+    Event.observe(window, "scroll", function() {
+        if (this.isShowing()) {
+            this.setPosition();
+        }
+    }.bind(this));
 };
 
 
@@ -177,10 +173,10 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
 MichaelHintbuble.Bubble.prototype._makeBubble = function() {
     if (!this._element) {
         this._container = new Element("DIV");
-        this._container.className = this._class;
+        this._container.className = "container";
         
         this._element = new Element("DIV");
-        this._element.className = "michael_hintbuble_bubble";
+        this._element.className = this._class;
         this._element.writeAttribute("style", this._style);
         this._element.update(this._container);
         this._element.hide();
@@ -195,7 +191,7 @@ MichaelHintbuble.Bubble.prototype._makeBubble = function() {
 MichaelHintbuble.Bubble.prototype._makeFrame = function() {
     if (!this._frame) {
         this._frame = new Element("IFRAME");
-        this._frame.className = "michael_hintbuble_bubble_frame";
+        this._frame.className = this._class + "_frame";
         this._frame.setAttribute("src", "about:blank");
         this._frame.hide();
     }
