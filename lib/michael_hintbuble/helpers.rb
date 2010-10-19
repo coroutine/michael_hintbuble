@@ -131,7 +131,7 @@ module Coroutine                #:nodoc:
             end
           end
           
-          js_kv_pairs << "#{js_key}:#{js_value}"
+          js_kv_pairs << "'#{js_key}':#{js_value}"
         end
         
         "{#{js_kv_pairs.join(',')}}"
