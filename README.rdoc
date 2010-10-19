@@ -35,8 +35,7 @@ What's that, you want a few more details?  You got it, bro.
 that, it will take the same options as <tt>ActionController::Base#render</tt>.  It'll also take a few 
 more, namely:
 
-* <tt>:class</tt> - the css style to assign to the outermost div container (defaults to "michael_hintbuble_bubble")
-* <tt>:style</tt> - additional css style assignments for the outermost div container (defaults to "")
+* <tt>:class</tt> - an additional css style to assign to the outermost div container (facilitates multiple stylings)
 * <tt>:position</tt> - css-style value that specifies the hint bubble's relative position, e.g., top, bottom, right, or left (defaults to right)
 * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble (accepts focus and/or mouseover)
 * <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
@@ -68,18 +67,16 @@ Michael Hintbuble
 == Multiple Hint Bubble Styles
 
 If you need to style more than one kind of hint bubble (e.g., one style for tooltips, one style for errors), just
-use the <tt>:class</tt> option to set a new css class name on the outermost div.  That'll give you a logical anchor 
+use the <tt>:class</tt> option to append a css class name on the outermost div.  That'll give you a logical anchor 
 around which you can restyle all the interior classes.
 
-Please note that the blocking iframe is automatically given a class name equal to the outermost div's class name plus 
+Please note that the blocking iframe is automatically given an additional class name equal to the outermost div's class name plus 
 the string "_frame".  
 
 By default, the top-level class assignments are "michael_hintbuble_bubble" and "michael_hintbuble_bubble_frame". 
 
 If you set the <tt>:class</tt> option to <tt>:error_bubble</tt>, the top-level class assignments will be 
-"error_bubble" and "error_bubble_frame".
-
-The <tt>:style</tt> option can be used to provide one-off styling, as needed.
+"michael_hintbuble_bubble error_bubble" and "michael_hintbuble_bubble_frame error_bubble_frame".
 
 
 

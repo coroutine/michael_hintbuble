@@ -1,15 +1,10 @@
-/**  
- * These styles are provided as examples. Feel free to change them however you like. 
- * Go ahead, see if we fucking care.
- */
-
+/* common styles */
 .michael_hintbuble_bubble_frame {
     position: absolute;
     border: none;
     z-index: 1;
     filter: alpha(opacity=0);                           /* really only needed if ie6 suport is enabled */
 }
-
 .michael_hintbuble_bubble {                   
     position: absolute;
     top: 0;
@@ -31,18 +26,51 @@
     -moz-border-radius:     2px;
     -webkit-border-radius:  2px;
 }
-.michael_hintbuble_bubble .bottom,               
+.michael_hintbuble_bubble .bottom,
 .michael_hintbuble_bubble .left,
 .michael_hintbuble_bubble .right,
 .michael_hintbuble_bubble .top {
-    background: url('../images/michael_hintbuble_pointer.png') no-repeat bottom;
-}
-.michael_hintbuble_bubble .bottom {
     background-position: top;
+    background-repeat: no-repeat;
 }
 .michael_hintbuble_bubble .left {
     background-position: right;
 }
 .michael_hintbuble_bubble .right {
     background-position: left;
+}
+.michael_hintbuble_bubble .top {
+    background-position: bottom;
+}
+
+
+/* error override styles */
+.error_bubble {
+    width: 250px;
+}
+.error_bubble .container .content {
+    background: #d00;
+    color: #fff;
+}
+.error_bubble .bottom,
+.error_bubble .left,
+.error_bubble .right,
+.error_bubble .top {
+    background-image: url('../images/error_bubble_pointer.png');
+}
+
+
+/* help override styles */
+.help_bubble {
+    width: 300px;
+}
+.help_bubble .container .content {
+    background: #333;
+    color: #fff;
+}
+.help_bubble .bottom,
+.help_bubble .left,
+.help_bubble .right,
+.help_bubble .top {
+    background-image: url('../images/help_bubble_pointer.png');
 }

@@ -10,13 +10,14 @@ class MichaelHintbubleGenerator < Rails::Generators::Base
   end
 
 
-  # This method copies stylesheet and javascript files to the 
+  # This method copies images, javascript, and stylesheet files to the 
   # corresponding public directories.
   #
   def generate_assets
-    copy_file "michael_hintbuble_pointer.png",  "public/images/michael_hintbuble_pointer.png"
-    copy_file "michael_hintbuble.css",          "public/stylesheets/michael_hintbuble.css"
-    copy_file "michael_hintbuble.js",           "public/javascripts/michael_hintbuble.js"
+    copy_file "help_bubble_pointer.png",    "public/images/help_bubble_pointer.png"
+    copy_file "error_bubble_pointer.png",   "public/images/error_bubble_pointer.png"
+    copy_file "michael_hintbuble.css",      "public/stylesheets/michael_hintbuble.css"
+    copy_file "michael_hintbuble.js",       "public/javascripts/michael_hintbuble.js"
   end
   
 end

@@ -35,8 +35,7 @@ MichaelHintbuble.Bubble = function(target_id, content, options) {
     this._positioner    = null;
     this._isShowing     = null;
     
-    this._class         = options["class"]      || "michael_hintbuble_bubble";
-    this._style         = options["style"]      || "";
+    this._class         = options["class"]      || "";
     this._eventNames    = options["eventNames"] || ["mouseover"]
     this._position      = options["position"]   || "right";
     this._beforeShow    = options["beforeShow"] || Prototype.emptyFunction
@@ -173,11 +172,11 @@ MichaelHintbuble.Bubble.prototype._attachObservers = function() {
 MichaelHintbuble.Bubble.prototype._makeBubble = function() {
     if (!this._element) {
         this._container = new Element("DIV");
-        this._container.className = "container";
+        this._container.addClassName("container");
         
         this._element = new Element("DIV");
-        this._element.className = this._class;
-        this._element.writeAttribute("style", this._style);
+        this._element.addClassName("michael_hintbuble_bubble");
+        this._element.addClassName(this._class);
         this._element.update(this._container);
         this._element.hide();
         document.body.insert(this._element);
@@ -191,9 +190,11 @@ MichaelHintbuble.Bubble.prototype._makeBubble = function() {
 MichaelHintbuble.Bubble.prototype._makeFrame = function() {
     if (!this._frame) {
         this._frame = new Element("IFRAME");
-        this._frame.className = this._class + "_frame";
+        this._frame.addClassName("michael_hintbuble_bubble_frame");
+        this._frame.addClassName(this._class + "_frame");
         this._frame.setAttribute("src", "about:blank");
         this._frame.hide();
+        document.body.insert(this._frame);
     }
 };
 
@@ -213,7 +214,8 @@ MichaelHintbuble.Bubble.prototype._makePositioner = function() {
  * class representing the relative position of the bubble to the target.
  */
 MichaelHintbuble.Bubble.prototype._updateContainerClass = function() {
-    this._container.className = "container";
+    this._container.removeClassName();
+    this._container.addClassName("container");
     this._container.addClassName(this._positioner.styleClassForPosition());
 };
 
@@ -226,16 +228,15 @@ MichaelHintbuble.Bubble.prototype.finalize = function() {
     this._positioner.finalize();
     this._container.remove();
     this._element.remove();
-    
+    if (this._frame) {
+        this._frame.remove();
+    }
+       
     this._target        = null;
     this._element       = null;
     this._container     = null;
     this._positioner    = null;
-    
-    if (MichaelHintbuble.SUPPORT_IE6_BULLSHIT) {
-        this._frame.remove();
-        this._frame = null;
-    }
+    this._frame         = null;
 };
 
 
@@ -315,8 +316,8 @@ MichaelHintbuble.Bubble.prototype.show = function() {
     
     if (this._frame) {
         var layout                  = new Element.Layout(this._element);
-        this._frame.style.top       = layout.get("top") + "px";
-        this._frame.style.left      = layout.get("left") + "px";
+        this._frame.style.top       = this._element.style.top;
+        this._frame.style.left      = this._element.style.left;
         this._frame.style.width     = layout.get("width") + "px";
         this._frame.style.height    = layout.get("height") + "px";
         
