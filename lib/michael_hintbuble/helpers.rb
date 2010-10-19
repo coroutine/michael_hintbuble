@@ -145,11 +145,10 @@ module Coroutine                #:nodoc:
         js_options = options.reject { |k,v| !bubble_javascript_option_keys.include?(k) }
         
         js_options[:position]     = "right"                     if js_options[:position].blank?
-        js_options[:event_names]  = []                          if js_options[:event_names].blank?
         
-        js_options[:class]        = js_options[:class].to_s
+        js_options[:event_names]  = []                          if js_options[:event_names].blank?
         js_options[:event_names]  = js_options[:event_names].uniq.map { |en| en.to_s }
-        js_options[:event_names] << "mouseover"                 if     js_options[:event_names].empty?
+        js_options[:event_names] << "mouseover"                 if js_options[:event_names].empty?
         
         js_options
       end

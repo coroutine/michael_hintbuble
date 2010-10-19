@@ -318,8 +318,8 @@ MichaelHintbuble.Bubble.prototype.show = function() {
         var layout                  = new Element.Layout(this._element);
         this._frame.style.top       = this._element.style.top;
         this._frame.style.left      = this._element.style.left;
-        this._frame.style.width     = layout.get("width") + "px";
-        this._frame.style.height    = layout.get("height") + "px";
+        this._frame.style.width     = layout.get("padding-box-width") + "px";
+        this._frame.style.height    = layout.get("padding-box-height") + "px";
         
         new Effect.Appear(this._frame, {
             duration: 0.2
