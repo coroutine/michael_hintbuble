@@ -8,7 +8,6 @@ module Coroutine                #:nodoc:
       # are specific to the hint bubble are:
       #
       # * <tt>:class</tt> - the css style to assign to the outermost div container (defaults to "michael_hintbuble_bubble")
-      # * <tt>:style</tt> - additional css style assignments for outermost div container (defaults to "")
       # * <tt>:position</tt> - css-style value that specifies the hint bubble's relative position, e.g., top, bottom, right, or left (defaults to right)
       # * <tt>:event_names</tt> - an array of strings specifying the events that should trigger the display of the hint bubble
       # * <tt>:before_show</tt> - a Javascript function that will be invoked before the hint bubble is shown
@@ -71,10 +70,10 @@ module Coroutine                #:nodoc:
       #
       def render_bubble(target_id, options = {}, &block)
         options[:inline]    = capture(&block) if block_given?
-        render_options      = extract_bubble_render_options(options, &block)
+        render_options      = extract_bubble_render_options(options)
         javascript_options  = bubble_options_to_js(extract_bubble_javascript_options(options))
         
-        content = escape_javascript(render(options))
+        content = escape_javascript(render(render_options))
         
         raise "You gotta specify a target id to register a hint bubble, baby."  unless target_id
         raise "You gotta provide content to register a hint bubble, baby."      unless content
@@ -106,7 +105,7 @@ module Coroutine                #:nodoc:
       # javascript library.
       #
       def bubble_javascript_option_keys
-        [:class, :style, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
+        [:class, :position, :event_names, :before_show, :after_show, :before_hide, :after_hide]
       end
       
       
@@ -145,7 +144,6 @@ module Coroutine                #:nodoc:
       def extract_bubble_javascript_options(options)
         js_options = options.reject { |k,v| !bubble_javascript_option_keys.include?(k) }
         
-        js_options[:class]        = "michael_hintbuble_bubble"  if js_options[:class].blank?
         js_options[:position]     = "right"                     if js_options[:position].blank?
         js_options[:event_names]  = []                          if js_options[:event_names].blank?
         
