@@ -120,6 +120,8 @@ module Coroutine                #:nodoc:
           js_key   = key.to_s.camelcase(:lower)
           js_value = "null" 
           
+          options[key] = options[key].to_s unless options[key].respond_to?(:empty?)
+          
           unless options[key].empty?
             case key
               when :before_show, :after_show, :before_hide, :after_hide
